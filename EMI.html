@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>EMI Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+    }
+    .calculator {
+      background: #fff;
+      padding: 30px;
+      max-width: 400px;
+      margin: auto;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .calculator h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .calculator label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .calculator input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .calculator button {
+      width: 100%;
+      padding: 10px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .calculator button:hover {
+      background: #218838;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="calculator">
+  <h2>EMI Calculator</h2>
+  
+  <label for="loanAmount">Loan Amount (Rs)</label>
+  <input type="number" id="loanAmount" placeholder="Enter loan amount">
+
+  <label for="interestRate">Interest Rate (% per annum)</label>
+  <input type="number" id="interestRate" placeholder="Enter annual interest rate">
+
+  <label for="loanTenure">Loan Tenure (Years)</label>
+  <input type="number" id="loanTenure" placeholder="Enter loan tenure in years">
+
+  <button onclick="calculateEMI()">Calculate EMI</button>
+
+  <div class="result" id="emiResult"></div>
+</div>
+
+<script>
+function calculateEMI() {
+  let principal = parseFloat(document.getElementById('loanAmount').value);
+  let annualInterest = parseFloat(document.getElementById('interestRate').value);
+  let tenureYears = parseFloat(document.getElementById('loanTenure').value);
+
+  if (isNaN(principal) || isNaN(annualInterest) || isNaN(tenureYears)) {
+    document.getElementById('emiResult').innerHTML = "Please enter valid inputs.";
+    return;
+  }
+
+  let monthlyRate = annualInterest / (12 * 100);
+  let tenureMonths = tenureYears * 12;
+
+  let emi = (principal * monthlyRate * Math.pow(1 + monthlyRate, tenureMonths)) / (Math.pow(1 + monthlyRate, tenureMonths) - 1);
+  
+  let totalPayment = emi * tenureMonths;
+  let totalInterest = totalPayment - principal;
+
+  document.getElementById('emiResult').innerHTML = `
+    <strong>Monthly EMI:</strong> Rs ${emi.toFixed(2)}<br>
+    <strong>Total Payment:</strong> Rs ${totalPayment.toFixed(2)}<br>
+    <strong>Total Interest:</strong> Rs ${totalInterest.toFixed(2)}
+  `;
+}
+</script>
+
+</body>
+</html>
